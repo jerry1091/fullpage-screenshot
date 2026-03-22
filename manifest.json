@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Full Page Screenshot",
+  "version": "1.1",
+  "description": "Capture full-page screenshots or PDFs locally. No network required.",
+  "permissions": ["debugger", "downloads", "activeTab", "tabs"],
+  "action": {
+    "default_title": "Full Page Screenshot",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
