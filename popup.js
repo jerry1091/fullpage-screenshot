@@ -7,7 +7,7 @@ function capture(format) {
       status.textContent = 'Saved to Downloads.';
       setTimeout(() => window.close(), 800);
     } else {
-      status.textContent = 'Error — check console.';
+      status.textContent = response?.error || 'Error — check console.';
     }
   });
 }

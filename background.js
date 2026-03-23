@@ -1,14 +1,22 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   handleCapture(message.format).then(
     () => sendResponse({ ok: true }),
-    () => sendResponse({ ok: false })
+    (err) => sendResponse({ ok: false, error: err.message })
   );
   return true; // keep message channel open for async response
 });
 
+const RESTRICTED_PROTOCOLS = ['chrome:', 'brave:', 'edge:', 'about:', 'chrome-extension:', 'devtools:'];
+
 async function handleCapture(format) {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const tabId = tab.id;
+
+  const url = tab.url || '';
+  const protocol = url.split(':')[0] + ':';
+  if (RESTRICTED_PROTOCOLS.includes(protocol)) {
+    throw new Error('Cannot capture browser internal pages. Navigate to a regular website first.');
+  }
 
   try {
     await chrome.debugger.attach({ tabId }, '1.3');
